@@ -1,6 +1,8 @@
 ---
 layout: post
 title:  "在Niagara中如何通過User Login Over SSL連接MQTT Broker"
+date:   2018-02-12 16:40:51 +0800
+categories: niagara mqtt
 ---
 
 # 在Niagara中如何通過User Login Over SSL連接MQTT Broker
