@@ -18,7 +18,7 @@ openssl req -x509 -new -key ca.key -out ca.crt
 
 ## Apache Apollo (1.7.1)
 ### Server Certificate
-- 生成服務器端證書，並用Root CA籤發
+- 生成服务器端证书，并用Root CA签发
 ```
 openssl genrsa -out server.key  2048
 openssl req -new -key server.key  -out server.csr
