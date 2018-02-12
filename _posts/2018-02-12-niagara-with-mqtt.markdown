@@ -5,8 +5,6 @@ date:   2018-02-12 16:40:51 +0800
 categories: niagara mqtt
 ---
 
-# 在Niagara中如何通過User Login Over SSL連接MQTT Broker
-
 ## Root CA
 - 生成Root CA证书的密钥：
 openssl genrsa -out ca.key 2048
@@ -50,6 +48,7 @@ mosquitto_sub -t edge -h 192.168.1.55 -p 9914 -u admin -P password --cafile /var
 - 如上生成服務器端證書並通過Root CA籤發
 - 通過mosquitto_passwd設置用戶和密碼並創建相應的配置文件pwfile
 - 在conf.d文件夾下新建自個的配置文件：
+
 ```
 allow_anonymous false
 password_file /etc/mosquitto/pwfile
