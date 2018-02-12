@@ -8,7 +8,7 @@ categories: niagara mqtt
 # 在Niagara中如何通過User Login Over SSL連接MQTT Broker
 
 ## Root CA
-- 生成CA Root证书的密钥：
+- 生成Root CA证书的密钥：
 openssl genrsa -out ca.key 2048
 - 生成Root CA根证书：
 openssl req -x509 -new -key ca.key -out ca.crt
@@ -25,6 +25,7 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -days 
 openssl pkcs12 -export -in server.crt -inkey server.key -out server.pkcs12
 - 生成服务器端keystore
 keytool -importkeystore -srckeystore server.pkcs12 -destkeystore server.jks -srcstoretype  pkcs12
+
 ### MQTT Configuration
 - 按照文檔安裝部署到Apollo後，將上面生成的server.jks配置到apollo.xml：
 
@@ -38,9 +39,9 @@ keytool -importkeystore -srckeystore server.pkcs12 -destkeystore server.jks -src
 ```
 
 ### Mosquitto Client
-- 連接TCP
+- 通过TCP连接
 mosquitto_sub -t edge -p 9913 -u admin -P password
-- 連接SSL
+- 通过SSL连接
 mosquitto_sub -t edge -h 192.168.1.55 -p 9914 -u admin -P password --cafile /var/lib/mqttbroker/etc/ca.crt
 
 
