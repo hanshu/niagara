@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to debug?"
+title:  "How to Niagara debugging?"
 ---
 
 ### Debugging Niagara AX in Eclipse
