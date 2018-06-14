@@ -47,6 +47,7 @@ public class BBlockManager extends BSingleton implements BIJavaScript, BIFormFac
 ```
 
 - workbench-WebWidget
+
 ```xml
 <p n="FacilityView" m="wb=workbench" t="wb:WebWidget">
     <p n="layout" m="ui=bajaui" t="ui:Layout" v="0.0,0.0,40.0,110.0"/>
