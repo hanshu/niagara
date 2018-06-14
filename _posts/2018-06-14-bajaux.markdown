@@ -92,6 +92,7 @@ Promise.map(fileNames, function(fileName) {
 
 axios
 - Promise based HTTP client for the browser and node.js
+
 ```javascript
 requirejs.config({
     paths: {
@@ -120,6 +121,7 @@ ECharts
 - A powerful, interactive charting and visualization library for browser
 
 ### CSS Loading
+
 ```javascript
 define(['baja!',
   'baja!vrf:Building',
