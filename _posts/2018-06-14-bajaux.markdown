@@ -142,6 +142,8 @@ define(['baja!',
   "use strict";
 
   var LEX = lexicons[0];
+
+}  
 ```
 
 ### Subscription
