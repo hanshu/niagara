@@ -1,0 +1,283 @@
+---
+layout: post
+title:  "bajaux"
+date:   2018-06-14 11:23:00 +0800
+categories: niagara
+---
+
+## 基础
+HTML, CSS, JavaScript
+
+jQuery
+
+RequireJS
+- JavaScript file and module loader
+
+BajaScript v2
+- JavaScript data API
+- Interact with a Niagara station
+
+bajaux
+- User interface framework
+- HTML5 widget framework
+- Widget
+    - Make a widget
+    - Bind it to an element in your page **doInitialize()**
+    - Load in a value **doLoad()**
+    - Read it back out **doRead()**
+    - Save changes **doSave()**
+    - Use **properties()** to expose properties you can change in the Px editor
+
+### Framework integration
+- agent
+```java
+@NiagaraType(agent = {@AgentOn(types = {"uxAbstractManagerDemo:Building"})})
+@NiagaraSingleton
+public class BBlockManager extends BSingleton implements BIJavaScript, BIFormFactorMax {
+  public static final BBlockManager INSTANCE = new BBlockManager();
+ 
+  @Override
+  public Type getType() { return TYPE; }
+  public static final Type TYPE = Sys.loadType(BBlockManager.class);
+
+  private static final JsInfo JS_INFO = JsInfo.make(BOrd.make("module://uxAbstractManagerDemo/rc/wb/mgr/BlockManager.js"),
+          BManagerDemoBuild.TYPE);
+  public JsInfo getJsInfo(Context cx) { return JS_INFO; }
+}
+```
+
+- workbench-WebWidget
+```xml
+<p n="FacilityView" m="wb=workbench" t="wb:WebWidget">
+    <p n="layout" m="ui=bajaui" t="ui:Layout" v="0.0,0.0,40.0,110.0"/>
+    <p n="js" t="b:Ord" v="view:vrf:FacilityView"/>
+    <p n="wbViewBinding" t="wb:WbViewBinding">
+      <p n="ord" v="station:|slot:/Facility" />
+    </p>
+</p>
+```
+
+## 进阶篇
+Handlebars
+- Provides the power necessary to let you build semantic templates effectively with no frustration
+
+Underscore
+- JavaScript library that provides a whole mess of useful functional programming helpers without extending any built-in objects
+
+bluebird
+- a full featured promise library with unmatched performance
+    - Promise.all
+    - Promise.join
+    - Promise.try
+    - Promise.map
+
+```node
+var promises = [];
+for (var i = 0; i < fileNames.length; ++i) {
+    promises.push(fs.readFileAsync(fileNames[i]));
+}
+Promise.all(promises).then(function() {
+    console.log("done");
+});
+
+// Using Promise.map:
+Promise.map(fileNames, function(fileName) {
+    // Promise.map awaits for returned promises as well.
+    return fs.readFileAsync(fileName);
+}).then(function() {
+    console.log("done");
+});
+```
+
+axios
+- Promise based HTTP client for the browser and node.js
+```javascript
+requirejs.config({
+    paths: {
+        axios: '/axios.min'
+    }
+});
+
+requirejs(['axios'], function (axios) {
+    axios.get('https://api.github.com/users/mzabriskie')
+     .then(function (user) {
+        document.getElementById('useravatar').src = user.data.avatar_url;
+        document.getElementById('username').innerHTML = user.data.name;
+    });
+});
+```
+
+D3
+- Data Driven Dcouments
+
+allow you to bind arbitrary data to DOM, and then appply data-driven transformations to the document
+
+C3
+- D3-based resuable chart library
+
+ECharts
+- A powerful, interactive charting and visualization library for browser
+
+### CSS Loading
+```javascript
+define(['baja!',
+  'baja!vrf:Building',
+  'bajaux/Widget',
+  'bajaux/mixin/subscriberMixIn',
+  'jquery',
+  'Promise',
+  'underscore',
+  'hbs!nmodule/vrf/rc/templates/BuildingList',
+  'hbs!nmodule/vrf/rc/templates/BuildingItem',
+  'hbs!nmodule/vrf/rc/templates/BuildingListWidget',
+  'lex!vrf',
+  '!nmodule/vrf/rc/bootstrap/js/bootstrap.bundle',
+  'css!nmodule/vrf/rc/bootstrap/css/bootstrap',
+  'css!nmodule/vrf/rc/fontawesome/css/fontawesome-all'], function (baja,types,Widget,subscriberMixIn,$,Promise,_,
+    facilityListTemplate,facilityItemTemplate,facilityViewTemplate,lexicons) {
+
+  "use strict";
+
+  var LEX = lexicons[0];
+```
+
+### Subscription
+A Widget can be made into a Subscriber Widget by a special Subscriber MixIn. A Subscriber MixIn will use BajaScript to automatically ensure a Component is subscribed and ready before it's loaded. It will also ensure any Components are unsubscribed when the UI is destroyed.
+
+```javascript
+var BuildingListWidget = function () {
+    var that = this;
+    Widget.apply(that, arguments);
+    that.properties().add("facilityOrd", "station:|slot:/Facility");
+
+    subscriberMixIn(that);
+};
+
+BuildingListWidget.prototype.doLoad = function (facilityOrd) {
+    var that = this,
+        jq = that.jq(),
+        buildingListDom = getBuildingListDom(jq);
+
+    var buildings = [];
+    var tasks = [];
+    var batch = new baja.comm.Batch();
+
+    var update = function () {
+      var buildings = [];
+      var tasks = [];
+      facilityOrd.getSlots()
+      .is("vrf:Building").eachValue(function (slot) {
+        var task = baja.Ord.make(slot.getOrdInSession()).get()
+        .then(function (building) {
+          that.getSubscriber().subscribe({
+            comps: building,
+            batch: batch
+          });
+
+          buildings.push({
+            id: building.getId(),
+            handle: building.getOrdInSession(),
+            name: building.getLocalityName(),
+            area: building.getArea(),
+            description: building.getDescription()
+          });
+        });
+
+        tasks.push(task);
+      });
+
+      batch.commit();
+
+      Promise.all(tasks).then(function () {
+        buildingListDom.html(facilityListTemplate(_.extend({
+          "localities": buildings
+        },that.lexicons)));
+      });
+    };
+
+    // call update whenever property changes
+    that.getSubscriber().attach({
+      changed: function(prop, cx) {
+        console.log('property changed->' + prop);
+
+        var targetHandle = this.getOrdInSession();
+        var selectedTR = buildingListDom.find("tr[data-handle='" + targetHandle + "']");
+        if(prop.getName()==='localityName') selectedTR.find('td:nth-child(1)').text(this.getLocalityName());
+        if(prop.getName()==='area') selectedTR.find('td:nth-child(2)').text(this.getArea());
+        if(prop.getName()==='description') selectedTR.find('td:nth-child(3)').text(this.getDescription());
+      },
+      renamed: function(prop,oname,cx) {
+        console.log('property renamed->' + prop);
+
+        var targetHandle = this.get(prop).getHandle();
+        var selectedTD = buildingListDom.find("tr[data-handle='" + targetHandle + "'] td");
+        selectedTD.text(prop.getName());
+      },
+      added: function(prop,cx) {
+        console.log('property added->' + prop);
+
+        var locality = this.get(prop);
+        if(locality.getType().is('vrf:Building')) {
+          that.getSubscriber().subscribe(locality);
+
+          buildingListDom.append(facilityItemTemplate(_.extend({
+              id: locality.getId(),
+              handle: locality.getOrdInSession(),
+              name: locality.getLocalityName(),
+              area: locality.getArea(),
+              description: locality.getDescription()
+            },that.lexicons))
+          );
+        }
+      },
+      removed: function(prop,val,cx) {
+        console.log('property remove->' + prop);
+        if(val.getType().is('vrf:Building')) {
+          var handle = val.getOrdInSession();
+          var selectedTR = buildingListDom.find("tr[data-handle='" + handle + "']");
+          selectedTR.remove();
+        }
+
+        that.getSubscriber().unsubscribe(val);
+      },
+      subscribed: function(cx) {
+        console.log('subscribed invoke');
+      }
+    });
+
+    update();
+  };
+```
+
+### Niagara RequireJS Gradle plugin
+This tells the Gradle build process to optimize your JavaScript using r.js.
+```gradle
+niagaraRjs {
+  builds = [
+    'vrf': [
+      rootDir: 'src/rc',
+      include: [
+        'nmodule/vrf/rc/vrf.run',
+        'nmodule/vrf/rc/BuildingListWidget',
+        'nmodule/vrf/rc/LocalityListWidget',
+        'nmodule/vrf/rc/FacilityView'
+      ]
+    ]
+  ]
+}
+```
+
+## 高级篇
+Node
+
+Gradle
+
+JSHint
+- a JavaScript Code Quality tool
+
+Grunt
+- JavaScript Task Runner
+
+Karma
+- Spectacular Test Runner for JavaScript
+    - make your test-driven development easy, fast, and fun.
