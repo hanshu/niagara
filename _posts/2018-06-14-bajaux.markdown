@@ -30,6 +30,7 @@ bajaux
 
 ### Framework integration
 - agent
+
 ```java
 @NiagaraType(agent = {@AgentOn(types = {"uxAbstractManagerDemo:Building"})})
 @NiagaraSingleton
