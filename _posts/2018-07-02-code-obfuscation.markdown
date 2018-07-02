@@ -5,8 +5,6 @@ date:   2018-07-02 14:37:00 +0800
 categories: niagara
 ---
 
-# Code Obfuscation
-
 >ProGuard successfully processes any Java bytecode, ranging from small Android applications to entire run-time libraries. It primarily reduces the size of the processed code, with some potential increase in efficiency as an added bonus. The improvements obviously depend on the original code.
 
 ## ProGuard GUI
