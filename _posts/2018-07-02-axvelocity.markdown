@@ -83,7 +83,12 @@ Velocity模板包含了设计好的HTML页面，以及通过VTL动态生成的�
 
 ## Niagara VTL
 
-Niagara Velocity封装了许多与Velocity相关的方法和属性，以便于在Velocity模板中使用这些API。
+Niagara Velocity封装了许多与Velocity相关的方法和属性，以便于在Velocity模板中使用这些API。例如，可以通过`$csrfToken`获取到当前请求的CSRF token：
+
+```vtl
+<!-- Access to CSRF token in a velocity template (.vm file)-->
+$csrfToken //This parameter can be used anywhere in a template to get the CSRF token.
+```
 
 # Hx Velocity Views
 
