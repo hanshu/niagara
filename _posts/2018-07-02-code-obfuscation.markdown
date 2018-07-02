@@ -9,7 +9,7 @@ categories: niagara
 
 ## ProGuard GUI
 
-The Nigara Regisry is a database of these types which allows the Niagara Framework to correctly create instances of a given Type. SO these Niagara Types must be kept in ProGuard configuration:
+The Niagara Regisry is a database of these types which allows the Niagara Framework to correctly create instances of a given Type. SO these Niagara Types must be kept in ProGuard configuration:
 
 ```
 -keep,includedescriptorclasses class * extends javax.baja.sys.BObject {
