@@ -118,6 +118,7 @@ Service status code|The HTTP status code.
 Bytes sent|The number of bytes sent by the server.
 
 如果在JettyWebServer -> NCSA Log里配置Extended Format为true，那么会增加下面两个字段：
+
 Field|Description
 ---|---
 Referer|This identifies the address of the webpage (i.e. the URI or IRI) that linked to the resource being requested. 
