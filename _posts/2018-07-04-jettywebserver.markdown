@@ -138,9 +138,25 @@ public UserIdentity login(String username, Object credentials, ServletRequest re
 }
 ```
 
-#### LoginService
+##### LoginService
 
 >The Login service provides an abstract mechanism for an Authenticator to check credentials and to create a UserIdentity using the set IdentityService.
+
+##### ServletContextHandler
+
+>This extension to the ContextHandler allows for simple construction of a context with ServletHandler and optionally session and security handlers, etc.
+
+###### WebAppContext
+
+>The WebAppContext handler is an extension of ContextHandler that coordinates the construction and configuration of nested handlers: ConstraintSecurityHandler, SessionHandler and ServletHandler. The handlers are configured by pluggable configuration classes, with the default being WebXmlConfiguration and JettyWebXmlConfiguration.
+
+##### ConstraintSecurityHandler
+
+>Handler to enforce SecurityConstraints. This implementation is servlet spec 3.1 compliant and pre-computes the constraint combinations for runtime efficiency.
+
+##### ContextHandlerCollection
+
+>This HandlerCollection is creates a Map of contexts to it's contained handlers based on the context path and virtual hosts of any contained ContextHandlers. The contexts do not need to be directly contained, only children of the contained handlers. Multiple contexts may have the same context path and they are called in order until one handles the request.
 
 #### NCSA Log
 
