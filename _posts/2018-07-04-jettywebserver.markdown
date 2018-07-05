@@ -101,6 +101,13 @@ public final class BJettyWebServer extends BWebServer {
 }
 ```
 
+Jetty限制可以从浏览器或其他客户端回发到服务器的数据量，允许的默认最大值是200000 bytes和1000 keys，可以通过修改system.properties来调整它们的大小：
+
+```text
+org.eclipse.jetty.server.Request.maxFormContentSize=250000
+org.eclipse.jetty.server.Request.maxFormKeys=2000
+```
+
 #### NiagaraLoginService
 
 ```java
