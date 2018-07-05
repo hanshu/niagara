@@ -153,7 +153,7 @@ Bytes sent|The number of bytes sent by the server.
 
 Field|Description
 ---|---
-Referer|This identifies the address of the webpage (i.e. the URI or IRI) that linked to the resource being requested. 
+Referer|This identifies the address of the webpage (i.e. the URI or IRI) that linked to the resource being requested.
 User agent|Most Web browsers use a User-Agent string value as follows: Mozilla/[version] ([system and browser information]) [platform] ([platform details]) [extensions].
 
 启用NCSA Log后默认会在站点的webLogs目录下生成yyyy_mm_dd.request.log文件，参看下面的Log示例：
