@@ -103,6 +103,38 @@ public final class BJettyWebServer extends BWebServer {
 
 #### NiagaraLoginService
 
+```java
+public UserIdentity login(String username, Object credentials, ServletRequest request) {
+  if (username == null) {
+    return null;
+  } else {
+    BUserService userService = (BUserService)Sys.getService(BUserService.TYPE);
+    NiagaraHttpSession session = (NiagaraHttpSession)credentials;
+    CallbackHandler handler = (CallbackHandler)session.getAttribute("callbackHandler");
+    BAuthenticationScheme scheme = (BAuthenticationScheme)session.getAttribute("authenticationScheme");
+    BUser user = userService.getUser(username);
+
+    try {
+      BAuthenticationService authnService = (BAuthenticationService)Sys.getService(BAuthenticationService.TYPE);
+      user = authnService.authenticate(session, user, handler, scheme);
+    } catch (AuthenticationException ex) {
+      if (ex.getLoginFailureCause() != null) {
+        session.setAttribute("loginFailureCause", ex.getLoginFailureCause());
+      }
+
+      log.info(ex.toString() + ": most likely a username/password mismatch");
+      return null;
+    }
+
+    return new NiagaraUserIdentity(user);
+  }
+}
+```
+
+#### LoginService
+
+>The Login service provides an abstract mechanism for an Authenticator to check credentials and to create a UserIdentity using the set IdentityService.
+
 #### NCSA Log
 
 >The Common Log Format, also known as the NCSA Common log format, is a standardized text file format used by web servers when generating server log files.
