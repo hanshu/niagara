@@ -1,0 +1,45 @@
+---
+layout: post
+title:  "Lexicon"
+categories: niagara
+---
+
+# LocaleFilter
+
+N4 introduces several usability and accuracy improvements for resolving the user's locale. There are three possible ways for Niagara to determine the user's locale:
+
+1. If the request has been authenticated, examine the BUser's langauge;
+2. If not, then check for an 'Accept Language' header. If the header has been defined, delegate Locale determination to the web containers implementation. Jetty does an excellent job of gleaning 'high quality' languages fro the header;
+3. As a last resort, use Sys#getLanguage;
+
+下面代码摘自**LocaleServletRequest**：
+
+```java
+public Locale getLocale() {
+  if (this.loc == null) {
+    Principal principal = this.getUserPrincipal();
+    if (principal != null && principal instanceof BUser) {
+      String userLang = ((BUser)principal).getLanguage();
+      if (!userLang.equals("")) {
+        this.loc = new Locale(userLang);
+      }
+    }
+
+    if (this.loc == null && this.getHeader("Accept-Language") != null) {
+      this.loc = this.getRequest().getLocale();
+    }
+
+    if (this.loc == null) {
+      this.loc = new Locale(Sys.getLanguage());
+    }
+  }
+
+  return this.loc;
+}
+```
+
+# Lexicon Module Builder
+
+在这里可以把!lexicon目录下的lexicon文件打包成Niagara的模块。
+
+## Brand Pattern
