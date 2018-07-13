@@ -52,6 +52,8 @@ public Locale getLocale() {
 
 >It is used by the Lexicon system at runtime, and will check the brand pattern against the brand of the current system (JACE or workbench), accepting only lexicons that match the pattern.
 
+The Niagara pattern matching will match any series of characters with "\*", or match a single character to "?". So brand patterns "?ridium", "tri?ium", "tri\*" should all match "tridium".
+
 # References
 
 - [Creating of a new lexicon module for distribution](local:|module://docLexicon/doc/ID-1086-000001f5.html#ID-1086-000001f5)
