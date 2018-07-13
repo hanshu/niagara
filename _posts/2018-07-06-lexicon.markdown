@@ -46,7 +46,7 @@ public Locale getLocale() {
 
 # Lexicon Module Builder
 
-在这里可以把!lexicon目录下的多个lexicon文件打包成Niagara的模块，从而便于通过platform ___Software Manager___ 将上面生成的lexicon模块安装到Jace控制器上。
+在这里可以把!lexicon目录下的多个lexicon文件打包成Niagara的模块，从而便于通过platform ___Software Manager___ 将上面生成的lexicon模块安装到JACE控制器上。
 
 ## Brand Pattern
 
