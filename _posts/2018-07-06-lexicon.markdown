@@ -4,12 +4,18 @@ title:  "Lexicon"
 categories: niagara
 ---
 
-# LocaleFilter
+# Locale Selection
 
-N4 introduces several usability and accuracy improvements for resolving the user's locale. There are three possible ways for Niagara to determine the user's locale:
+Every time a Niagara VM is started it attempts to select a default locale using the host operating system. The OS default may be overridden via the command line flag "-locale:___lang___", where lang is the locale code. The default locale of the VM may be accessed via the Sys.getLanguage() API.
+
+When the workbench is launched as a desktop application it follows the rules above to select it's locale. Once selected the entire workbench uses that locale independent of user accounts used to log into stations.
+
+## LocaleFilter
+
+N4 introduces several usability and accuracy improvements for resolving the user's locale. There are three possible ways for Niagara to determine the user's locale for web browser access to station:
 
 1. If the request has been authenticated, examine the BUser's langauge;
-2. If not, then check for an 'Accept Language' header. If the header has been defined, delegate Locale determination to the web containers implementation. Jetty does an excellent job of gleaning 'high quality' languages fro the header;
+2. If not, then check for an 'Accept Language' header. If the header has been defined, delegate Locale determination to the web containers implementation. Jetty does an excellent job of gleaning 'high quality' languages from the header;
 3. As a last resort, use Sys#getLanguage;
 
 下面代码摘自**LocaleServletRequest**：
@@ -40,6 +46,12 @@ public Locale getLocale() {
 
 # Lexicon Module Builder
 
-在这里可以把!lexicon目录下的lexicon文件打包成Niagara的模块。
+在这里可以把!lexicon目录下的多个lexicon文件打包成Niagara的模块，从而便于通过platform ___Software Manager___ 将上面生成的lexicon模块安装到Jace控制器上。
 
 ## Brand Pattern
+
+>It is used by the Lexicon system at runtime, and will check the brand pattern against the brand of the current system (JACE or workbench), accepting only lexicons that match the pattern.
+
+# References
+
+- [Creating of a new lexicon module for distribution](local:|module://docLexicon/doc/ID-1086-000001f5.html#ID-1086-000001f5)
