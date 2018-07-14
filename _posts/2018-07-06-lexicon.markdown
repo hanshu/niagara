@@ -46,7 +46,7 @@ public Locale getLocale() {
 
 # Lexicon Module Builder
 
-在这里可以把!lexicon目录下的多个lexicon文件打包成Niagara的模块，从而便于通过platform ___Software Manager___ 将上面生成的lexicon模块安装到JACE控制器上。
+在这里可以把!lexicon目录下的多个lexicon文件打包成Niagara的模块，从而便于通过platform _Software Manager_ 将上面生成的lexicon模块安装到JACE控制器上。
 
 ## Brand Pattern
 
@@ -56,6 +56,6 @@ The Niagara pattern matching will match any series of characters with "\*", or m
 
 # References
 
-- [Creating of a new lexicon module for distribution][bajadoc]
+- [Creating of a new lexicon module for distribution][baja doc]
 
-[bajadoc]: local:|module://docLexicon/doc/ID-1086-000001f5.html#ID-1086-000001f5
+[baja doc]: module://docLexicon/doc/ID-1086-000001f5.html#ID-1086-000001f5
